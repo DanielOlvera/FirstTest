@@ -3,6 +3,7 @@
     android:id="@+id/f_logFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.daniel.first_test.LogFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -10,5 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />
+    <fragment
+        android:name="com.example.daniel.first_test.LogFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
