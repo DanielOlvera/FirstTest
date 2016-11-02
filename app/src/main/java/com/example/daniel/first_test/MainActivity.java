@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     int attempts = 3;
 
-    OkHttpClient okConnection;
+    OkHttpClient okConnection = new OkHttpClient();
 
     ArrayList<UsersPJ> usrList;
 
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        metaDJson();
 
         StrictMode.ThreadPolicy strictMode = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(strictMode);
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 for (UsersPJ usrPJ : usrList) {
                     if(usrPJ.getName().equals(usrName.getText()) && usrPJ.getPassword().equals(usrLogin.getText())){
+                        Log.d(TAG, "onClick: " + usrName + usrPJ.getName());
+                        Log.d(TAG, "onClick: " + usrLogin + usrPJ.getPassword());
                         //Here im sending the second activity and removing the toast
                         Toast.makeText(MainActivity.this, "Welcome " + usrName.getText(), Toast.LENGTH_SHORT).show();
 
@@ -76,19 +79,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void metaDJson(){
+        String myJson = null;
         try {
-            String myJson = run("http://www.mocky.io/v2/57a4dfb40f0000821dc9a3b8");
-            UsersParser parser = new UsersParser();
-            usrList = parser.parserMagic(myJson);
-            for (UsersPJ userPJ: usrList){
-                Log.d(TAG, "User List: " + userPJ);
-            }
+            myJson = run("http://www.mocky.io/v2/57a4dfb40f0000821dc9a3b8");
         } catch (IOException e) {
-            Log.d(TAG, "Exception: " + e);
+            e.printStackTrace();
+        }
+
+        UsersParser userParser = new UsersParser();
+        usrList = userParser.parserMagic(myJson);
+
+        for (UsersPJ userPJ : usrList) {
+            Log.d(TAG, "metaDJson: " + userPJ);
         }
     }
 
     String run(String url) throws IOException {
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();
